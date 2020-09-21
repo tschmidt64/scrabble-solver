@@ -15,7 +15,8 @@ enum ImageState {
 }
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
-    let images: [UIImage] =  (0...3).map { UIImage(named: "scrabble-\($0)")! }
+    
+    let images: [UIImage] =  (0...5).map { UIImage(named: "scrabble-\($0)")! }
     var curImageIdx = 0
     var curImageState = ImageState.normal
     

@@ -18,6 +18,12 @@
 		5240C7B3250EB42000881EA1 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5240C7B1250EB41F00881EA1 /* opencv2.framework */; };
 		5240C7BD250EDF4500881EA1 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5240C7BC250EDF4500881EA1 /* OpenCVWrapper.mm */; };
 		5240C7BE250EDF4500881EA1 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5240C7BC250EDF4500881EA1 /* OpenCVWrapper.mm */; };
+		5274C9552518375A00D84A9D /* IndoorOutdoor.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5274C9542518375A00D84A9D /* IndoorOutdoor.mlmodel */; };
+		5274C9562518375A00D84A9D /* IndoorOutdoor.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5274C9542518375A00D84A9D /* IndoorOutdoor.mlmodel */; };
+		5274C9582518394B00D84A9D /* AVCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5274C9572518394B00D84A9D /* AVCaptureViewController.swift */; };
+		5274C9592518394B00D84A9D /* AVCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5274C9572518394B00D84A9D /* AVCaptureViewController.swift */; };
+		5274C95B25183A1000D84A9D /* ObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5274C95A25183A1000D84A9D /* ObjectRecognitionViewController.swift */; };
+		5274C95C25183A1000D84A9D /* ObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5274C95A25183A1000D84A9D /* ObjectRecognitionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +54,9 @@
 		5240C7BC250EDF4500881EA1 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
 		5240C7C2250EDF7C00881EA1 /* ScrabbleSolverTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ScrabbleSolverTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		5240C7C3250EDF7C00881EA1 /* ScrabbleSolver-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ScrabbleSolver-Bridging-Header.h"; sourceTree = "<group>"; };
+		5274C9542518375A00D84A9D /* IndoorOutdoor.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = IndoorOutdoor.mlmodel; sourceTree = "<group>"; };
+		5274C9572518394B00D84A9D /* AVCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureViewController.swift; sourceTree = "<group>"; };
+		5274C95A25183A1000D84A9D /* ObjectRecognitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectRecognitionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +113,9 @@
 				5240C7BC250EDF4500881EA1 /* OpenCVWrapper.mm */,
 				5240C7C3250EDF7C00881EA1 /* ScrabbleSolver-Bridging-Header.h */,
 				5240C7C2250EDF7C00881EA1 /* ScrabbleSolverTests-Bridging-Header.h */,
+				5274C9542518375A00D84A9D /* IndoorOutdoor.mlmodel */,
+				5274C9572518394B00D84A9D /* AVCaptureViewController.swift */,
+				5274C95A25183A1000D84A9D /* ObjectRecognitionViewController.swift */,
 			);
 			path = ScrabbleSolver;
 			sourceTree = "<group>";
@@ -232,6 +244,9 @@
 				5240C790250EB2CB00881EA1 /* ViewController.swift in Sources */,
 				5240C78C250EB2CB00881EA1 /* AppDelegate.swift in Sources */,
 				5240C78E250EB2CB00881EA1 /* SceneDelegate.swift in Sources */,
+				5274C95B25183A1000D84A9D /* ObjectRecognitionViewController.swift in Sources */,
+				5274C9582518394B00D84A9D /* AVCaptureViewController.swift in Sources */,
+				5274C9552518375A00D84A9D /* IndoorOutdoor.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,7 +254,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5274C95C25183A1000D84A9D /* ObjectRecognitionViewController.swift in Sources */,
+				5274C9562518375A00D84A9D /* IndoorOutdoor.mlmodel in Sources */,
 				5240C7BE250EDF4500881EA1 /* OpenCVWrapper.mm in Sources */,
+				5274C9592518394B00D84A9D /* AVCaptureViewController.swift in Sources */,
 				5240C7A3250EB2CC00881EA1 /* ScrabbleSolverTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,7 +342,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -378,7 +396,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
