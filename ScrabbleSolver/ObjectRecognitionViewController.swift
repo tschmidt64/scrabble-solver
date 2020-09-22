@@ -9,13 +9,6 @@
 import AVFoundation
 import Vision
 
-typealias Rectangle = (
-    topLeft: CGPoint,
-    topRight: CGPoint,
-    bottomRight: CGPoint,
-    bottomLeft: CGPoint
-)
-
 class ObjectRecognitionViewController : AVCaptureViewController {
 
     private var requests = [VNRequest]()
@@ -88,7 +81,7 @@ class ObjectRecognitionViewController : AVCaptureViewController {
             let polygonPoints = filteredCornerBoxes.map { CGPoint(x: $0.midX, y: $0.midY) }
             let sortedPolygonPoints = polygonPoints.sorted { $0.x < $1.x }
             let firstIsTopLeft = sortedPolygonPoints[0].y < sortedPolygonPoints[1].y
-            let rectangle: Rectangle = firstIsTopLeft
+            let quad: Quadrilateral = firstIsTopLeft
                 ? (
                     topLeft: sortedPolygonPoints[0],
                     topRight: sortedPolygonPoints[1],
@@ -102,7 +95,7 @@ class ObjectRecognitionViewController : AVCaptureViewController {
                     bottomLeft: sortedPolygonPoints[3]
                 )
           
-            self.drawRectangleCorners(rect: rectangle)
+//            self.drawRectangleCorners(rect: rectangle)
             
                 
 //            let boardBBox: CGRect = detectedCornersToBBox(cornerBBoxes)
@@ -123,27 +116,27 @@ class ObjectRecognitionViewController : AVCaptureViewController {
         }
     }
     
-    func drawRectangleCorners(rect: Rectangle) {
+    func drawRectangleCorners(quad: Quadrilateral) {
         let size = 24
         
         let tl = CGRect(
-            x: Int(rect.topLeft.x) - size / 2,
-            y: Int(rect.topLeft.y) - size / 2,
+            x: Int(quad.topLeft.x) - size / 2,
+            y: Int(quad.topLeft.y) - size / 2,
             width: size,
             height: size)
         let tr = CGRect(
-            x: Int(rect.topRight.x) - size / 2,
-            y: Int(rect.topRight.y) - size / 2,
+            x: Int(quad.topRight.x) - size / 2,
+            y: Int(quad.topRight.y) - size / 2,
             width: size,
             height: size)
         let br = CGRect(
-            x: Int(rect.bottomRight.x) - size / 2,
-            y: Int(rect.bottomRight.y) - size / 2,
+            x: Int(quad.bottomRight.x) - size / 2,
+            y: Int(quad.bottomRight.y) - size / 2,
             width: size,
             height: size)
         let bl = CGRect(
-            x: Int(rect.bottomLeft.x) - size / 2,
-            y: Int(rect.bottomLeft.y) - size / 2,
+            x: Int(quad.bottomLeft.x) - size / 2,
+            y: Int(quad.bottomLeft.y) - size / 2,
             width: size,
             height: size)
         
@@ -236,5 +229,5 @@ class ObjectRecognitionViewController : AVCaptureViewController {
         CATransaction.commit()
         
     }
-
+    
 }

@@ -26,6 +26,8 @@
 		5274C95C25183A1000D84A9D /* ObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5274C95A25183A1000D84A9D /* ObjectRecognitionViewController.swift */; };
 		52FB29102519A5E700ECFB12 /* ImageCaptureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB290F2519A5E700ECFB12 /* ImageCaptureVC.swift */; };
 		52FB29112519A5E700ECFB12 /* ImageCaptureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB290F2519A5E700ECFB12 /* ImageCaptureVC.swift */; };
+		52FB2917251A43EB00ECFB12 /* Quadrilateral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB2916251A43EB00ECFB12 /* Quadrilateral.swift */; };
+		52FB2918251A43EB00ECFB12 /* Quadrilateral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FB2916251A43EB00ECFB12 /* Quadrilateral.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,7 @@
 		5274C9572518394B00D84A9D /* AVCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureViewController.swift; sourceTree = "<group>"; };
 		5274C95A25183A1000D84A9D /* ObjectRecognitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectRecognitionViewController.swift; sourceTree = "<group>"; };
 		52FB290F2519A5E700ECFB12 /* ImageCaptureVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureVC.swift; sourceTree = "<group>"; };
+		52FB2916251A43EB00ECFB12 /* Quadrilateral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quadrilateral.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +107,7 @@
 		5240C78A250EB2CB00881EA1 /* ScrabbleSolver */ = {
 			isa = PBXGroup;
 			children = (
+				52FB2915251A43DB00ECFB12 /* Models */,
 				5240C78B250EB2CB00881EA1 /* AppDelegate.swift */,
 				5240C78D250EB2CB00881EA1 /* SceneDelegate.swift */,
 				5240C78F250EB2CB00881EA1 /* ViewController.swift */,
@@ -139,6 +143,14 @@
 				5240C7B1250EB41F00881EA1 /* opencv2.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		52FB2915251A43DB00ECFB12 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				52FB2916251A43EB00ECFB12 /* Quadrilateral.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,6 +259,7 @@
 				5240C7BD250EDF4500881EA1 /* OpenCVWrapper.mm in Sources */,
 				5240C790250EB2CB00881EA1 /* ViewController.swift in Sources */,
 				5240C78C250EB2CB00881EA1 /* AppDelegate.swift in Sources */,
+				52FB2917251A43EB00ECFB12 /* Quadrilateral.swift in Sources */,
 				5240C78E250EB2CB00881EA1 /* SceneDelegate.swift in Sources */,
 				5274C95B25183A1000D84A9D /* ObjectRecognitionViewController.swift in Sources */,
 				5274C9582518394B00D84A9D /* AVCaptureViewController.swift in Sources */,
@@ -265,6 +278,7 @@
 				52FB29112519A5E700ECFB12 /* ImageCaptureVC.swift in Sources */,
 				5274C9592518394B00D84A9D /* AVCaptureViewController.swift in Sources */,
 				5240C7A3250EB2CC00881EA1 /* ScrabbleSolverTests.swift in Sources */,
+				52FB2918251A43EB00ECFB12 /* Quadrilateral.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,6 +28,7 @@ class ImageCaptureVC : UIViewController {
     var captureSession: AVCaptureSession!
     var stillImageOutput: AVCapturePhotoOutput!
     var videoPreviewLayer: AVCaptureVideoPreviewLayer!
+    var timer: Timer?
     
     // MARK: Lifecycle
     
@@ -35,6 +36,12 @@ class ImageCaptureVC : UIViewController {
         captureSession = AVCaptureSession()
         stillImageOutput = AVCapturePhotoOutput()
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 20, repeats: true) { timer in
+                let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
+                self.stillImageOutput.capturePhoto(with: settings, delegate: self)
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -78,14 +85,12 @@ class ImageCaptureVC : UIViewController {
 
 extension ImageCaptureVC : AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        
         guard let imageData = photo.fileDataRepresentation() else { return }
-        let image = UIImage(data: imageData)
-        captureImageView.image = image
-        guard let pixelBuffer = photo.pixelBuffer else { print("Failed to get pixel buffer"); return }
-        let orientation = exifOrientationFromDeviceOrientation()
-        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: orientation, options: [:])
+//        let orientation = exifOrientationFromDeviceOrientation()
+        let imageRequestHandler = VNImageRequestHandler(data: imageData, options: [:])
         do {
+            let image = UIImage(data: imageData)
+            DispatchQueue.main.async { self.captureImageView.image = image }
             let requests = try generateRequests(image: image!)
             try imageRequestHandler.perform(requests)
         } catch {
@@ -132,7 +137,7 @@ extension ImageCaptureVC {
             let polygonPoints = filteredCornerBoxes.map { CGPoint(x: $0.midX, y: $0.midY) }
             let sortedPolygonPoints = polygonPoints.sorted { $0.x < $1.x }
             let firstIsTopLeft = sortedPolygonPoints[0].y < sortedPolygonPoints[1].y
-            let rectangle: Rectangle = firstIsTopLeft
+            let quad: Quadrilateral = firstIsTopLeft
                 ? (
                     topLeft: sortedPolygonPoints[0],
                     topRight: sortedPolygonPoints[1],
@@ -146,6 +151,39 @@ extension ImageCaptureVC {
                     bottomLeft: sortedPolygonPoints[3]
                 )
             
+            let size = 24
+            let tlRect = CGRect(
+                x: Int(quad.topLeft.x) - size / 2,
+                y: Int(quad.topLeft.y) - size / 2,
+                width: size,
+                height: size)
+            let trRect = CGRect(
+                x: Int(quad.topRight.x) - size / 2,
+                y: Int(quad.topRight.y) - size / 2,
+                width: size,
+                height: size)
+            let brRect = CGRect(
+                x: Int(quad.bottomRight.x) - size / 2,
+                y: Int(quad.bottomRight.y) - size / 2,
+                width: size,
+                height: size)
+            let blRect = CGRect(
+                x: Int(quad.bottomLeft.x) - size / 2,
+                y: Int(quad.bottomLeft.y) - size / 2,
+                width: size,
+                height: size)
+
+            if let cgImageCopy = image.cgImage?.copy() {
+                var drawnImage = UIImage(cgImage: cgImageCopy)
+                drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: tlRect) ?? drawnImage
+                drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: trRect) ?? drawnImage
+                drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: brRect) ?? drawnImage
+                drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: blRect) ?? drawnImage
+                DispatchQueue.main.async {
+                    self.captureImageView.image = drawnImage
+                }
+            }
+            
 //            self.drawRectangleCorners(rect: rectangle)
             
                 
@@ -156,6 +194,22 @@ extension ImageCaptureVC {
         })
         
         return [objDetectionReq]
+    }
+    
+    func drawRectangleOnImage(image: UIImage, rectangle: CGRect) -> UIImage? {
+        let imageSize = image.size
+        let scale: CGFloat = 0
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, scale)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+
+        image.draw(at: CGPoint.zero)
+        context.setFillColor(UIColor.yellow.cgColor)
+        context.addRect(rectangle)
+        context.drawPath(using: .fill)
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
     }
 
 }
@@ -178,3 +232,31 @@ func exifOrientationFromDeviceOrientation() -> CGImagePropertyOrientation {
     }
     return exifOrientation
 }
+
+extension UIImage {
+    func toPixelBuffer() -> CVPixelBuffer? {
+        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue, kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+        var pixelBuffer : CVPixelBuffer?
+        let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(self.size.width), Int(self.size.height), kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
+        guard (status == kCVReturnSuccess) else {
+          return nil
+        }
+
+        CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+        let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer!)
+
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+        let context = CGContext(data: pixelData, width: Int(self.size.width), height: Int(self.size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
+
+        context?.translateBy(x: 0, y: self.size.height)
+        context?.scaleBy(x: 1.0, y: -1.0)
+
+        UIGraphicsPushContext(context!)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        UIGraphicsPopContext()
+        CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+
+        return pixelBuffer
+    }
+}
+
