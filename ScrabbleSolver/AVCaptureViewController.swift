@@ -9,7 +9,7 @@
 
 import AVFoundation
 
-class AVCaptureViewController : UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate{
+class AVCaptureViewController : UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     var bufferSize: CGSize = .zero
     var rootLayer: CALayer! = nil
     
@@ -72,7 +72,8 @@ class AVCaptureViewController : UIViewController, AVCaptureVideoDataOutputSample
         captureConnection?.isEnabled = true
         do {
             try videoDevice!.lockForConfiguration()
-            let dimensions = CMVideoFormatDescriptionGetDimensions((videoDevice?.activeFormat.formatDescription)!)
+            let description = videoDevice?.activeFormat.formatDescription
+            let dimensions = CMVideoFormatDescriptionGetDimensions(description!)
             bufferSize.width = CGFloat(dimensions.width)
             bufferSize.height = CGFloat(dimensions.height)
             videoDevice!.unlockForConfiguration()
