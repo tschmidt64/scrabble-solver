@@ -37,7 +37,7 @@ class ImageCaptureVC : UIViewController {
         stillImageOutput = AVCapturePhotoOutput()
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 20, repeats: true) { timer in
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 10, repeats: true) { timer in
                 let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
                 self.stillImageOutput.capturePhoto(with: settings, delegate: self)
             }
@@ -119,9 +119,7 @@ extension ImageCaptureVC {
             let objectObservations = results.compactMap { $0 as? VNRecognizedObjectObservation }
             print("Number of observations: \(objectObservations.count)")
             
-            let cornerBBoxes = objectObservations.map {
-                VNImageRectForNormalizedRect($0.boundingBox, Int(image.size.width), Int(image.size.height))
-            }
+            let cornerBBoxes = objectObservations.map { VNImageRectForNormalizedRect($0.boundingBox, Int(image.size.width), Int(image.size.height)) }
             
             let filteredCornerBoxes = cornerBBoxes.enumerated()
                 .filter { i, box1 in
@@ -152,29 +150,32 @@ extension ImageCaptureVC {
                 )
             
             let size = 24
+            let y = Int(image.size.height - (quad.topLeft.y - CGFloat(size / 2)))
             let tlRect = CGRect(
                 x: Int(quad.topLeft.x) - size / 2,
-                y: Int(quad.topLeft.y) - size / 2,
+                y: Int(image.size.height - (quad.topLeft.y - CGFloat(size / 2))),
                 width: size,
                 height: size)
             let trRect = CGRect(
                 x: Int(quad.topRight.x) - size / 2,
-                y: Int(quad.topRight.y) - size / 2,
+                y: Int(image.size.height - (quad.topRight.y - CGFloat(size / 2))),
                 width: size,
                 height: size)
             let brRect = CGRect(
                 x: Int(quad.bottomRight.x) - size / 2,
-                y: Int(quad.bottomRight.y) - size / 2,
+                y: Int(image.size.height - (quad.bottomRight.y - CGFloat(size / 2))),
                 width: size,
                 height: size)
             let blRect = CGRect(
                 x: Int(quad.bottomLeft.x) - size / 2,
-                y: Int(quad.bottomLeft.y) - size / 2,
+                y: Int(image.size.height - (quad.bottomLeft.y - CGFloat(size / 2))),
                 width: size,
                 height: size)
 
             if let cgImageCopy = image.cgImage?.copy() {
-                var drawnImage = UIImage(cgImage: cgImageCopy)
+//                var drawnImage = UIImage(cgImage: cgImageCopy)
+                var drawnImage = UIImage(cgImage: cgImageCopy, scale: 1.0, orientation: .right)
+                
                 drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: tlRect) ?? drawnImage
                 drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: trRect) ?? drawnImage
                 drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: brRect) ?? drawnImage
