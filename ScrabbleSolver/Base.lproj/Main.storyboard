@@ -107,40 +107,49 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CYT-Ll-Vmc" userLabel="Preview View">
-                                <rect key="frame" x="20" y="0.0" width="393" height="524"/>
+                                <rect key="frame" x="20" y="20" width="393" height="524"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="CYT-Ll-Vmc" secondAttribute="height" multiplier="3:4" id="UUP-k1-BQZ"/>
                                 </constraints>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Pr6-IS-eeE">
-                                <rect key="frame" x="421" y="0.0" width="393" height="524"/>
-                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WH9-P2-Byo">
                                 <rect key="frame" x="20" y="981" width="794" height="111"/>
-                                <color key="backgroundColor" red="0.91372549020000005" green="0.1333333333" blue="0.40784313729999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Button"/>
+                                <color key="backgroundColor" systemColor="systemGray2Color" red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonTapped:" destination="JxQ-Js-cSI" eventType="touchUpInside" id="p6R-ha-dpZ"/>
+                                </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Pr6-IS-eeE">
+                                <rect key="frame" x="421" y="20" width="393" height="524"/>
+                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="Pr6-IS-eeE" firstAttribute="top" secondItem="846-nc-3iO" secondAttribute="top" id="2Wa-dL-4Ml"/>
                             <constraint firstItem="WH9-P2-Byo" firstAttribute="top" relation="greaterThanOrEqual" secondItem="CYT-Ll-Vmc" secondAttribute="bottom" constant="8" id="5jw-Lh-bLJ"/>
                             <constraint firstItem="Pr6-IS-eeE" firstAttribute="width" secondItem="CYT-Ll-Vmc" secondAttribute="width" id="6DP-qr-bVU"/>
                             <constraint firstItem="WH9-P2-Byo" firstAttribute="height" secondItem="Uha-w6-u1K" secondAttribute="height" multiplier="0.1" id="PTD-dF-jj1"/>
+                            <constraint firstItem="CYT-Ll-Vmc" firstAttribute="top" secondItem="846-nc-3iO" secondAttribute="top" constant="20" id="Ukk-ya-VXB"/>
                             <constraint firstItem="Pr6-IS-eeE" firstAttribute="leading" secondItem="CYT-Ll-Vmc" secondAttribute="trailing" priority="750" constant="8" id="Xj3-I9-ebn"/>
                             <constraint firstItem="WH9-P2-Byo" firstAttribute="leading" secondItem="846-nc-3iO" secondAttribute="leading" constant="20" id="Ynq-Ho-RS4"/>
                             <constraint firstItem="WH9-P2-Byo" firstAttribute="top" secondItem="Pr6-IS-eeE" secondAttribute="bottom" priority="750" constant="8" id="dAC-7d-Cuk"/>
                             <constraint firstItem="846-nc-3iO" firstAttribute="bottom" secondItem="WH9-P2-Byo" secondAttribute="bottom" constant="20" id="eSS-GF-B4x"/>
                             <constraint firstItem="846-nc-3iO" firstAttribute="trailing" secondItem="WH9-P2-Byo" secondAttribute="trailing" constant="20" id="h2e-s1-yuy"/>
                             <constraint firstItem="CYT-Ll-Vmc" firstAttribute="leading" secondItem="846-nc-3iO" secondAttribute="leading" constant="20" id="hom-LJ-jKn"/>
-                            <constraint firstItem="CYT-Ll-Vmc" firstAttribute="top" secondItem="846-nc-3iO" secondAttribute="top" id="jaH-Df-fm8"/>
+                            <constraint firstItem="Pr6-IS-eeE" firstAttribute="top" secondItem="846-nc-3iO" secondAttribute="top" constant="20" id="kzJ-Du-W7L"/>
                             <constraint firstItem="Pr6-IS-eeE" firstAttribute="height" secondItem="CYT-Ll-Vmc" secondAttribute="height" id="lbu-4A-HY2"/>
                             <constraint firstItem="846-nc-3iO" firstAttribute="trailing" secondItem="Pr6-IS-eeE" secondAttribute="trailing" constant="20" id="wdh-5a-B3f"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="846-nc-3iO"/>
                     </view>
+                    <connections>
+                        <outlet property="captureImageView" destination="Pr6-IS-eeE" id="4gV-Rp-F4n"/>
+                        <outlet property="previewView" destination="CYT-Ll-Vmc" id="r5V-5C-86y"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xid-eJ-z7m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
