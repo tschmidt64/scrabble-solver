@@ -39,11 +39,8 @@ class ImageCaptureVC : UIViewController {
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 10, repeats: true) { timer in
-                // retrieve current orientation from the device
-                let deviceOrientation = UIDevice.current.orientation
-
                 // setup a connection that manages input > output
-                guard let photoOutputConnection = self.stillImageOutput.connection(with: AVMediaType.video) else { fatalError("Unable to establish input>output connection") }
+                guard let photoOutputConnection = self.stillImageOutput.connection(with: AVMediaType.video) else { print("Unable to establish input>output connection"); return }
 
                 // update photo's output connection to match device's orientation
                 photoOutputConnection.videoOrientation =
