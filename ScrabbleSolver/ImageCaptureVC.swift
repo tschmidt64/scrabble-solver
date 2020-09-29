@@ -42,8 +42,21 @@ class ImageCaptureVC : UIViewController {
                 self.stillImageOutput.capturePhoto(with: settings, delegate: self)
             }
         }
+        NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main, using: didRotate)
     }
-    
+   
+    func didRotate(_ notification: Notification) {
+        videoPreviewLayer.connection?.videoOrientation = exifOrientationFromDeviceOrientation()
+        switch UIDevice.current.orientation {
+        case .landscapeLeft, .landscapeRight:
+            print("landscape")
+        case .portrait, .portraitUpsideDown:
+            print("Portrait")
+        default:
+            print("other")
+        }
+
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.captureSession.stopRunning()
@@ -72,7 +85,8 @@ class ImageCaptureVC : UIViewController {
     
     func setupLivePreview() {
         videoPreviewLayer.videoGravity = .resizeAspect
-        videoPreviewLayer.connection?.videoOrientation = .portrait
+        videoPreviewLayer.connection?.videoOrientation = exifOrientationFromDeviceOrientation()
+//        videoPreviewLayer.connection?.videoOrientation = .portrait
         previewView.layer.addSublayer(videoPreviewLayer)
         DispatchQueue.global(qos: .userInitiated).async {
             self.captureSession.startRunning()
@@ -86,8 +100,9 @@ class ImageCaptureVC : UIViewController {
 extension ImageCaptureVC : AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let imageData = photo.fileDataRepresentation() else { return }
-//        let orientation = exifOrientationFromDeviceOrientation()
+//        let imageRequestHandler = VNImageRequestHandler(data: imageData, orientation: exifOrientationFromDeviceOrientation(), options: [:])
         let imageRequestHandler = VNImageRequestHandler(data: imageData, options: [:])
+
         do {
             let image = UIImage(data: imageData)
             DispatchQueue.main.async { self.captureImageView.image = image }
@@ -115,9 +130,7 @@ extension ImageCaptureVC {
                 print("Failed to get vision results")
                 return
             }
-            print("Got vision results")
             let objectObservations = results.compactMap { $0 as? VNRecognizedObjectObservation }
-            print("Number of observations: \(objectObservations.count)")
             
             let cornerBBoxes = objectObservations.map { VNImageRectForNormalizedRect($0.boundingBox, Int(image.size.width), Int(image.size.height)) }
             
@@ -130,7 +143,6 @@ extension ImageCaptureVC {
             if filteredCornerBoxes.count != 4 {
                 return
             }
-            print("Got 4 corners!: \(filteredCornerBoxes)")
             
             let polygonPoints = filteredCornerBoxes.map { CGPoint(x: $0.midX, y: $0.midY) }
             let sortedPolygonPoints = polygonPoints.sorted { $0.x < $1.x }
@@ -233,6 +245,27 @@ func exifOrientationFromDeviceOrientation() -> CGImagePropertyOrientation {
     }
     return exifOrientation
 }
+
+func exifOrientationFromDeviceOrientation() -> AVCaptureVideoOrientation {
+    let curDeviceOrientation = UIDevice.current.orientation
+    let exifOrientation: AVCaptureVideoOrientation
+    
+    switch curDeviceOrientation {
+    case UIDeviceOrientation.portraitUpsideDown:  // Device oriented vertically, home button on the top
+        exifOrientation = .portraitUpsideDown
+    case UIDeviceOrientation.landscapeLeft:       // Device oriented horizontally, home button on the right
+        exifOrientation = .landscapeRight
+    case UIDeviceOrientation.landscapeRight:      // Device oriented horizontally, home button on the left
+        exifOrientation = .landscapeLeft
+    case UIDeviceOrientation.portrait:            // Device oriented vertically, home button on the bottom
+        exifOrientation = .portrait
+    default:
+        exifOrientation = .portrait
+    }
+    print(exifOrientation)
+    return exifOrientation
+}
+
 
 extension UIImage {
     func toPixelBuffer() -> CVPixelBuffer? {
