@@ -29,7 +29,8 @@ class ImageCaptureVC : UIViewController {
     var stillImageOutput: AVCapturePhotoOutput!
     var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     var timer: Timer?
-    
+    var deviceOrientationOnCapture: UIDeviceOrientation? = UIDevice.current.orientation
+
     // MARK: Lifecycle
     
     override func viewDidLoad() {
@@ -38,6 +39,19 @@ class ImageCaptureVC : UIViewController {
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 10, repeats: true) { timer in
+                // retrieve current orientation from the device
+                let deviceOrientation = UIDevice.current.orientation
+
+                // setup a connection that manages input > output
+                guard let photoOutputConnection = self.stillImageOutput.connection(with: AVMediaType.video) else { fatalError("Unable to establish input>output connection") }
+
+                // update photo's output connection to match device's orientation
+                photoOutputConnection.videoOrientation =
+                    UIDevice.current.orientation.isFlat
+                        ? photoOutputConnection.videoOrientation
+                        : exifOrientationFromDeviceOrientation()
+
+                
                 let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
                 self.stillImageOutput.capturePhoto(with: settings, delegate: self)
             }
@@ -46,7 +60,12 @@ class ImageCaptureVC : UIViewController {
     }
    
     func didRotate(_ notification: Notification) {
-        videoPreviewLayer.connection?.videoOrientation = exifOrientationFromDeviceOrientation()
+        guard let connection = videoPreviewLayer.connection else { return }
+        connection.videoOrientation =
+            UIDevice.current.orientation.isFlat
+                ? connection.videoOrientation
+                : exifOrientationFromDeviceOrientation()
+        
         switch UIDevice.current.orientation {
         case .landscapeLeft, .landscapeRight:
             print("landscape")
@@ -98,15 +117,58 @@ class ImageCaptureVC : UIViewController {
 }
 
 extension ImageCaptureVC : AVCapturePhotoCaptureDelegate {
+    func photoOutput(_ output: AVCapturePhotoOutput,
+                       willBeginCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings)
+                       {
+        // get device orientation on capture
+        let deviceOrientation = UIDevice.current.orientation
+        
+        self.deviceOrientationOnCapture =
+            deviceOrientation.isFlat
+                ? self.deviceOrientationOnCapture
+                : deviceOrientation
+            
+    }
+
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard let imageData = photo.fileDataRepresentation() else { return }
+        
+        guard let imageData = photo.fileDataRepresentation() else {
+            print("Error while generating image from photo capture data.");
+            return
+
+        }
+
+        guard let uiImage = UIImage(data: imageData) else {
+            print("Unable to generate UIImage from image data.");
+            return
+
+        }
+
+        // generate a corresponding CGImage
+        guard let cgImage = uiImage.cgImage else {
+            print("Error generating CGImage");
+            return
+
+        }
+
+        guard let deviceOrientationOnCapture = self.deviceOrientationOnCapture else {
+            print("Error retrieving orientation on capture")
+            return
+
+        }
+
+        let finalPhoto = UIImage(cgImage: cgImage, scale: 1.0, orientation: deviceOrientationOnCapture.getUIImageOrientationFromDevice())
+
+        
+        
+//        guard let imageData = photo.fileDataRepresentation() else { return }
 //        let imageRequestHandler = VNImageRequestHandler(data: imageData, orientation: exifOrientationFromDeviceOrientation(), options: [:])
         let imageRequestHandler = VNImageRequestHandler(data: imageData, options: [:])
 
         do {
-            let image = UIImage(data: imageData)
-            DispatchQueue.main.async { self.captureImageView.image = image }
-            let requests = try generateRequests(image: image!)
+//            let image = UIImage(data: imageData)
+            DispatchQueue.main.async { self.captureImageView.image = finalPhoto }
+            let requests = try generateRequests(image: finalPhoto)
             try imageRequestHandler.perform(requests)
         } catch {
             print(error)
@@ -186,7 +248,8 @@ extension ImageCaptureVC {
 
             if let cgImageCopy = image.cgImage?.copy() {
 //                var drawnImage = UIImage(cgImage: cgImageCopy)
-                var drawnImage = UIImage(cgImage: cgImageCopy, scale: 1.0, orientation: .right)
+                let o = self.deviceOrientationOnCapture?.getUIImageOrientationFromDevice() ?? .right
+                var drawnImage = UIImage(cgImage: cgImageCopy, scale: 1.0, orientation: o)
                 
                 drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: tlRect) ?? drawnImage
                 drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: trRect) ?? drawnImage
@@ -194,6 +257,7 @@ extension ImageCaptureVC {
                 drawnImage = self.drawRectangleOnImage(image: drawnImage, rectangle: blRect) ?? drawnImage
                 DispatchQueue.main.async {
                     self.captureImageView.image = drawnImage
+//                    self.captureImageView.image = image
                 }
             }
             
@@ -262,7 +326,6 @@ func exifOrientationFromDeviceOrientation() -> AVCaptureVideoOrientation {
     default:
         exifOrientation = .portrait
     }
-    print(exifOrientation)
     return exifOrientation
 }
 
@@ -294,3 +357,19 @@ extension UIImage {
     }
 }
 
+extension UIDeviceOrientation {
+    func getUIImageOrientationFromDevice() -> UIImage.Orientation {
+        // return CGImagePropertyOrientation based on Device Orientation
+        // This extented function has been determined based on experimentation with how an UIImage gets displayed.
+        switch self {
+        case .portrait, .faceUp: return .right
+        case .portraitUpsideDown, .faceDown: return .left
+        case .landscapeLeft: return .up // this is the base orientation
+        case .landscapeRight: return .down
+        case .unknown: return .up
+        default:
+            print("OOPS default")
+            return .up
+        }
+    }
+}
