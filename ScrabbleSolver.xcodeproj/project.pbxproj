@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5207EF882573441F004EFBDA /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5207EF872573441F004EFBDA /* FrameExtractor.swift */; };
+		5207EF8C25734851004EFBDA /* FrameExtractorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5207EF8B25734851004EFBDA /* FrameExtractorViewController.swift */; };
 		5240C78C250EB2CB00881EA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5240C78B250EB2CB00881EA1 /* AppDelegate.swift */; };
 		5240C78E250EB2CB00881EA1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5240C78D250EB2CB00881EA1 /* SceneDelegate.swift */; };
 		5240C790250EB2CB00881EA1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5240C78F250EB2CB00881EA1 /* ViewController.swift */; };
@@ -41,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5207EF872573441F004EFBDA /* FrameExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
+		5207EF8B25734851004EFBDA /* FrameExtractorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtractorViewController.swift; sourceTree = "<group>"; };
 		5240C788250EB2CB00881EA1 /* ScrabbleSolver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScrabbleSolver.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5240C78B250EB2CB00881EA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5240C78D250EB2CB00881EA1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +128,8 @@
 				5274C9572518394B00D84A9D /* AVCaptureViewController.swift */,
 				5274C95A25183A1000D84A9D /* ObjectRecognitionViewController.swift */,
 				52FB290F2519A5E700ECFB12 /* ImageCaptureVC.swift */,
+				5207EF872573441F004EFBDA /* FrameExtractor.swift */,
+				5207EF8B25734851004EFBDA /* FrameExtractorViewController.swift */,
 			);
 			path = ScrabbleSolver;
 			sourceTree = "<group>";
@@ -260,11 +266,13 @@
 				5240C790250EB2CB00881EA1 /* ViewController.swift in Sources */,
 				5240C78C250EB2CB00881EA1 /* AppDelegate.swift in Sources */,
 				52FB2917251A43EB00ECFB12 /* Quadrilateral.swift in Sources */,
+				5207EF882573441F004EFBDA /* FrameExtractor.swift in Sources */,
 				5240C78E250EB2CB00881EA1 /* SceneDelegate.swift in Sources */,
 				5274C95B25183A1000D84A9D /* ObjectRecognitionViewController.swift in Sources */,
 				5274C9582518394B00D84A9D /* AVCaptureViewController.swift in Sources */,
 				5274C9552518375A00D84A9D /* IndoorOutdoor.mlmodel in Sources */,
 				52FB29102519A5E700ECFB12 /* ImageCaptureVC.swift in Sources */,
+				5207EF8C25734851004EFBDA /* FrameExtractorViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
