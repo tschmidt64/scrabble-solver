@@ -16,6 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)openCVVersionString;
 + (UIImage *)processImage:(UIImage *)image;
++ (UIImage *)addRectangles:(UIImage *)image
+               withTopLeft:(CGPoint)topLeft
+              withTopRight:(CGPoint)topRight
+            withBottomLeft:(CGPoint)bottomLeft
+           withBottomRight:(CGPoint)bottomRight;
 + (int)openCVNumber;
 
 @end

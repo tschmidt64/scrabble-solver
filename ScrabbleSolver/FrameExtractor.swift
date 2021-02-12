@@ -13,10 +13,14 @@ protocol FrameExtractorDelegate: class {
     func captured(image: UIImage)
 }
 
+protocol SampleBufferDelegate: class {
+    func captured(sampleBuffer: CMSampleBuffer)
+}
+
 class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     private let position = AVCaptureDevice.Position.front
-    private let quality = AVCaptureSession.Preset.medium
+    private let quality = AVCaptureSession.Preset.high
     
     private var permissionGranted = false
     private let sessionQueue = DispatchQueue(label: "session queue", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
@@ -25,6 +29,7 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     private let context = CIContext()
     
     weak var delegate: FrameExtractorDelegate?
+    weak var sampleBufferDelegate: SampleBufferDelegate?
     
     private var deviceOrientationOnCapture: UIDeviceOrientation?
 
@@ -106,6 +111,9 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
             self.delegate?.captured(image: uiImage)
         }
 
+        DispatchQueue.main.async { [unowned self] in
+            self.sampleBufferDelegate?.captured(sampleBuffer: sampleBuffer)
+        }
     }
     
 }

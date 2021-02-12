@@ -14,6 +14,7 @@
 using namespace std;
 
 RNG rng(12345);
+typedef cv::Point3_<uint8_t> Pixel;
 
 
 
@@ -46,6 +47,53 @@ RNG rng(12345);
     return ColorConversionCodes::COLOR_RGB2GRAY;
 }
 
++ (UIImage *)addRectangles:(UIImage *)image
+               withTopLeft:(CGPoint)topLeft
+              withTopRight:(CGPoint)topRight
+            withBottomLeft:(CGPoint)bottomLeft
+           withBottomRight:(CGPoint)bottomRight {
+    if (image.imageOrientation == UIImageOrientationLeft || image.imageOrientation == UIImageOrientationRight) {
+        image = [image normalizedImage];
+    }
+    
+    Mat mat;
+    UIImageToMat(image, mat);
+    cv::Size matSize = mat.size();
+//    int size = 24;
+//    vector<cv::Rect> rects = {
+//        cv::Rect(topLeft.x, matSize.height - topLeft.y, size, size),
+//        cv::Rect(topRight.x, matSize.height - topRight.y, size, size),
+//        cv::Rect(bottomLeft.x, matSize.height - bottomLeft.y, size, size),
+//        cv::Rect(bottomRight.x, matSize.height - bottomRight.y, size, size),
+//    };
+//    for (cv::Rect r : rects) {
+//        cv::rectangle(mat, r, cv::Scalar(0,0,0), -1);
+//    }
+//    Mat output = mat;
+    
+    
+    
+    Mat output(1200, 1200, mat.type());
+    std::vector<cv::Point2f> points = {
+        cv::Point2f(topLeft.x, matSize.height - topLeft.y),
+        cv::Point2f(topRight.x, matSize.height - topRight.y),
+        cv::Point2f(bottomLeft.x, matSize.height - bottomLeft.y),
+        cv::Point2f(bottomRight.x, matSize.height - bottomRight.y),
+    };
+
+    std::vector<cv::Point2f> outputPoints = {
+        cv::Point2f(CGFloat(0), CGFloat(0)),
+        cv::Point2f(CGFloat(output.cols - 1), CGFloat(0)),
+        cv::Point2f(CGFloat(0), CGFloat(output.rows - 1)),
+        cv::Point2f(CGFloat(output.cols - 1), CGFloat(output.rows - 1)),
+    };
+
+    Mat transform = getPerspectiveTransform(points, outputPoints);
+    warpPerspective(mat, output, transform, output.size());
+
+    UIImage *resultImage = MatToUIImage(output);
+    return resultImage;
+}
 
 + (UIImage *)processImage:(UIImage *)image {
     if (image.imageOrientation == UIImageOrientationLeft || image.imageOrientation == UIImageOrientationRight) {
@@ -58,26 +106,28 @@ RNG rng(12345);
 //    std::cout << "Gray!" << std::endl;
     Mat gray;
     cvtColor(inputMat, gray, ColorConversionCodes::COLOR_RGB2GRAY);
+    UIImage *result = MatToUIImage(gray);
+    return result;
+
     
-    
-    cv::Size patternsize(7, 7);
-    vector<Point2f> corners;
-    findChessboardCorners(gray, patternsize, corners);
-    bool patternfound = findChessboardCorners(
-        gray,
-        patternsize,
-        corners,
-        CALIB_CB_ADAPTIVE_THRESH + CALIB_CB_NORMALIZE_IMAGE + CALIB_CB_FAST_CHECK
-    );
-    
-    if (patternfound) {
-        std::cout << "Pattern found!" << std::endl;
-        cornerSubPix(gray, corners, cv::Size(11, 11), cv::Size(-1, -1), TermCriteria(TermCriteria::EPS + TermCriteria::MAX_ITER, 30, 0.1));
-    } else {
-        std::cout << "NOT found!" << std::endl;
-    }
-    
-    drawChessboardCorners(inputMat, patternsize, Mat(corners), patternfound);
+//    cv::Size patternsize(7, 7);
+//    vector<Point2f> corners;
+//    findChessboardCorners(gray, patternsize, corners);
+//    bool patternfound = findChessboardCorners(
+//        gray,
+//        patternsize,
+//        corners,
+//        CALIB_CB_ADAPTIVE_THRESH + CALIB_CB_NORMALIZE_IMAGE + CALIB_CB_FAST_CHECK
+//    );
+//
+//    if (patternfound) {
+//        std::cout << "Pattern found!" << std::endl;
+//        cornerSubPix(gray, corners, cv::Size(11, 11), cv::Size(-1, -1), TermCriteria(TermCriteria::EPS + TermCriteria::MAX_ITER, 30, 0.1));
+//    } else {
+//        std::cout << "NOT found!" << std::endl;
+//    }
+//
+//    drawChessboardCorners(inputMat, patternsize, Mat(corners), patternfound);
     
     
 //    Mat claheImg;
@@ -116,8 +166,8 @@ RNG rng(12345);
 //        drawContours( drawnContours, contours, i, color, 2, 8, hierarchy, 0, cv::Point() );
 //    }
 
-    UIImage *result = MatToUIImage(inputMat);
-    return result;
+//    UIImage *result = MatToUIImage(inputMat);
+//    return result;
 }
 
 @end

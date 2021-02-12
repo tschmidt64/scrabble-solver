@@ -20,6 +20,7 @@
 		5240C7B3250EB42000881EA1 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5240C7B1250EB41F00881EA1 /* opencv2.framework */; };
 		5240C7BD250EDF4500881EA1 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5240C7BC250EDF4500881EA1 /* OpenCVWrapper.mm */; };
 		5240C7BE250EDF4500881EA1 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5240C7BC250EDF4500881EA1 /* OpenCVWrapper.mm */; };
+		5246F18F2581BEAB0073E5A0 /* VNCoreMLRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5246F18E2581BEAB0073E5A0 /* VNCoreMLRequester.swift */; };
 		5274C9552518375A00D84A9D /* IndoorOutdoor.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5274C9542518375A00D84A9D /* IndoorOutdoor.mlmodel */; };
 		5274C9562518375A00D84A9D /* IndoorOutdoor.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5274C9542518375A00D84A9D /* IndoorOutdoor.mlmodel */; };
 		5274C9582518394B00D84A9D /* AVCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5274C9572518394B00D84A9D /* AVCaptureViewController.swift */; };
@@ -62,6 +63,7 @@
 		5240C7BC250EDF4500881EA1 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
 		5240C7C2250EDF7C00881EA1 /* ScrabbleSolverTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ScrabbleSolverTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		5240C7C3250EDF7C00881EA1 /* ScrabbleSolver-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ScrabbleSolver-Bridging-Header.h"; sourceTree = "<group>"; };
+		5246F18E2581BEAB0073E5A0 /* VNCoreMLRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNCoreMLRequester.swift; sourceTree = "<group>"; };
 		5274C9542518375A00D84A9D /* IndoorOutdoor.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = IndoorOutdoor.mlmodel; sourceTree = "<group>"; };
 		5274C9572518394B00D84A9D /* AVCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureViewController.swift; sourceTree = "<group>"; };
 		5274C95A25183A1000D84A9D /* ObjectRecognitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectRecognitionViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				52FB290F2519A5E700ECFB12 /* ImageCaptureVC.swift */,
 				5207EF872573441F004EFBDA /* FrameExtractor.swift */,
 				5207EF8B25734851004EFBDA /* FrameExtractorViewController.swift */,
+				5246F18E2581BEAB0073E5A0 /* VNCoreMLRequester.swift */,
 			);
 			path = ScrabbleSolver;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5246F18F2581BEAB0073E5A0 /* VNCoreMLRequester.swift in Sources */,
 				5240C7BD250EDF4500881EA1 /* OpenCVWrapper.mm in Sources */,
 				5240C790250EB2CB00881EA1 /* ViewController.swift in Sources */,
 				5240C78C250EB2CB00881EA1 /* AppDelegate.swift in Sources */,
